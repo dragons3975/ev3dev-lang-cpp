@@ -42,6 +42,7 @@ if (EV3DEV_LANG_CPP_MASTER_PROJECT)
     add_subdirectory(tests)
 
     add_subdirectory(demos)
+    add_subdirectory(mini-FTC)
 
     #----------------------------------------------------------------------
     # Install the library, header, and cmake configuration
