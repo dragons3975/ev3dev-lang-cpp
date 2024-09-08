@@ -11,7 +11,8 @@
 typedef enum {
     Reset,
     Init,
-    Run
+    Run,
+    Stop
 } State;
 
 int main() {
@@ -22,13 +23,20 @@ int main() {
     
     ev3dev::sound::speak("Hello");
     
-    State state = Run;
+    State state = Stop;
     
     char buffer[1024];
 
     while ( ! ev3dev::button::enter.pressed() )
     {
-        wServeur.receive(buffer);
+        if (wServeur.receive(buffer) < 0)
+        {
+            state = Stop;
+        }
+        else
+        {
+            state = Run;
+        }
 
         switch(state)
         {
@@ -41,13 +49,17 @@ int main() {
                 wRobot.run();
                 wRobotProtocol.encodeSensors(buffer);
                 break;
+            case Stop:
+                wRobot.stop();
+                wRobotProtocol.encodeSensors(buffer);
+                break;
             default:
                 break;
         }
 
         wServeur.send(buffer);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     
     ev3dev::led::all_off();
