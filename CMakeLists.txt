@@ -38,10 +38,10 @@ function(add_ev3_executable target sources)
 endfunction()
 
 if (EV3DEV_LANG_CPP_MASTER_PROJECT)
-    enable_testing()
-    add_subdirectory(tests)
+    #enable_testing()
+    #add_subdirectory(tests)
 
-    add_subdirectory(demos)
+    #add_subdirectory(demos)
     add_subdirectory(mini-FTC)
 
     #----------------------------------------------------------------------

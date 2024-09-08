@@ -16,5 +16,7 @@ class Robot
 
     public:
         Robot(RobotProtocol *iRobotProtocol);
+        ~Robot();
         void run();
+        void stop();
 };

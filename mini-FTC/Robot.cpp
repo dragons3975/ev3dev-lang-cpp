@@ -4,10 +4,10 @@
 
 Robot::Robot(RobotProtocol *iRobotProtocol)
     : mRobotProtocol(iRobotProtocol)
-    , mMotorA()
-    , mMotorB()
-    , mMotorC()
-    , mMotorD()
+    , mMotorA(ev3dev::OUTPUT_A)
+    , mMotorB(ev3dev::OUTPUT_B)
+    , mMotorC(ev3dev::OUTPUT_C)
+    , mMotorD(ev3dev::OUTPUT_D)
     , mTouchSensor()
     , mColorSensor()
     , mUltrasonicSensor()
@@ -15,23 +15,28 @@ Robot::Robot(RobotProtocol *iRobotProtocol)
 {
 }
 
+Robot::~Robot()
+{
+    stop();
+}
+
 void Robot::run()
 {
-    int wDutyCycle = 100 * ((mRobotProtocol->getEv3MotorSpeed()[0] & 0xFF)/255.0*2-1);
-    //std::cout << "mMotorA: " << wDutyCycle << std::endl;
-    if (mMotorA.connected()) mMotorA.set_duty_cycle_sp(wDutyCycle).run_direct();
+    int wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[0] & 0xFF)/255.0*2-1);
+    //std::cout << "mMotorA: " << wSpeed << std::endl;
+    if (mMotorA.connected()) mMotorA.set_speed_sp(wSpeed).run_forever();
 
-    wDutyCycle = 100 * ((mRobotProtocol->getEv3MotorSpeed()[1] & 0xFF)/255.0*2-1);
-    //std::cout << "mMotorB: " << wDutyCycle << std::endl;
-    if (mMotorB.connected()) mMotorB.set_duty_cycle_sp(wDutyCycle).run_direct();
+    wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[1] & 0xFF)/255.0*2-1);
+    //std::cout << "mMotorB: " << wSpeed << std::endl;
+    if (mMotorB.connected()) mMotorB.set_speed_sp(wSpeed).run_forever();
 
-    wDutyCycle = 100 * ((mRobotProtocol->getEv3MotorSpeed()[2] & 0xFF)/255.0*2-1);
-    //std::cout << "mMotorC: " << wDutyCycle << std::endl;
-    if (mMotorC.connected()) mMotorC.set_duty_cycle_sp(wDutyCycle).run_direct();
+    wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[2] & 0xFF)/255.0*2-1);
+    //std::cout << "mMotorC: " << wSpeed << std::endl;
+    if (mMotorC.connected()) mMotorC.set_speed_sp(wSpeed).run_forever();
 
-    wDutyCycle = 100 * ((mRobotProtocol->getEv3MotorSpeed()[3] & 0xFF)/255.0*2-1);
-    //std::cout << "mMotorD: " << wDutyCycle << std::endl;
-    if (mMotorD.connected()) mMotorD.set_duty_cycle_sp(wDutyCycle).run_direct();
+    wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[3] & 0xFF)/255.0*2-1);
+    //std::cout << "mMotorD: " << wSpeed << std::endl;
+    if (mMotorD.connected()) mMotorD.set_speed_sp(wSpeed).run_forever();
     
     char wEv3SensorValue[8] = {};
     wEv3SensorValue[0] = mMotorA.connected() ? mMotorA.position() & 0xFF : 0;
@@ -48,4 +53,12 @@ void Robot::run()
     char wArduinoSensorValue[3] = {};
 
     mRobotProtocol->setArduinoSensorValue(wArduinoSensorValue, sizeof(wArduinoSensorValue));
+}
+
+void Robot::stop()
+{
+    if (mMotorA.connected()) mMotorA.stop();
+    if (mMotorB.connected()) mMotorB.stop();
+    if (mMotorC.connected()) mMotorC.stop();
+    if (mMotorD.connected()) mMotorD.stop();
 }

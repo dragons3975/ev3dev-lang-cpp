@@ -16,7 +16,7 @@ typedef enum {
 
 int main() {
 
-    Serveur s;
+    Serveur wServeur;
     RobotProtocol wRobotProtocol;
     Robot wRobot(&wRobotProtocol);
     
@@ -28,7 +28,7 @@ int main() {
 
     while ( ! ev3dev::button::enter.pressed() )
     {
-        s.receive(buffer);
+        wServeur.receive(buffer);
 
         switch(state)
         {
@@ -45,7 +45,7 @@ int main() {
                 break;
         }
 
-        s.send(buffer);
+        wServeur.send(buffer);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
