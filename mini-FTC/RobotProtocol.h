@@ -6,7 +6,7 @@ class RobotProtocol
         char mEv3MotorSpeed[4] = {};
         char mArduinoMotorSpeed[5] = {};
         char mEv3SensorValue[8] = {};
-        char mArduinoSensorValue[3] = {};
+        char mArduinoSensorValue[2] = {};
 
     public:
         RobotProtocol();

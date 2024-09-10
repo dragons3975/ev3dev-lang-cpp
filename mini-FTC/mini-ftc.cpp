@@ -9,6 +9,7 @@
 #include "Robot.h"
 
 typedef enum {
+    Unknown,
     Reset,
     Init,
     Run,
@@ -23,6 +24,7 @@ int main() {
     
     ev3dev::sound::speak("Hello");
     
+    State prevState = Unknown;
     State state = Stop;
     
     char buffer[1024];
@@ -36,6 +38,12 @@ int main() {
         else
         {
             state = Run;
+        }
+
+        if (prevState != state)
+        {
+            std::cout << "State: " << state << std::endl;
+            prevState = state;
         }
 
         switch(state)

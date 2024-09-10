@@ -3,6 +3,7 @@
 #include <ev3dev.h>
 
 #include "RobotProtocol.h"
+#include "Arduino.h"
 
 class Robot
 {
@@ -13,6 +14,7 @@ class Robot
         ev3dev::ultrasonic_sensor mUltrasonicSensor;
         ev3dev::gyro_sensor mGyroSensor;
         RobotProtocol *mRobotProtocol;
+        Arduino mArduino;
 
     public:
         Robot(RobotProtocol *iRobotProtocol);

@@ -1,4 +1,5 @@
 set(SOURCE_FILES
+    Arduino.cpp
     mini-ftc.cpp
     Robot.cpp
     RobotProtocol.cpp

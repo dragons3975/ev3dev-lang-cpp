@@ -12,6 +12,7 @@ Robot::Robot(RobotProtocol *iRobotProtocol)
     , mColorSensor()
     , mUltrasonicSensor()
     , mGyroSensor()
+    , mArduino(iRobotProtocol)
 {
 }
 
@@ -50,9 +51,11 @@ void Robot::run()
 
     mRobotProtocol->setEv3SensorValue(wEv3SensorValue, sizeof(wEv3SensorValue));
 
-    char wArduinoSensorValue[3] = {};
+    mArduino.run();
 
-    mRobotProtocol->setArduinoSensorValue(wArduinoSensorValue, sizeof(wArduinoSensorValue));
+    //char wArduinoSensorValue[2] = {};
+
+    //mRobotProtocol->setArduinoSensorValue(wArduinoSensorValue, sizeof(wArduinoSensorValue));
 }
 
 void Robot::stop()
