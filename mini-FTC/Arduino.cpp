@@ -41,7 +41,7 @@ void Arduino::run()
     uint8_t tacho[4] = {};
     get(tacho, MOTOR_TACHO_0, 4);
     wArduinoSensorValue[0] = (tacho[0] & 0xFF) + ((tacho[1] & 0xFF) << 8) + ((tacho[2] & 0xFF) << 16) + ((tacho[3] & 0xFF) << 24);
-    std::cout << wArduinoSensorValue[0] << std::endl;
+    //std::cout << wArduinoSensorValue[0] << std::endl;
 
     set(MOTOR_PORT, 1);
     set(MOTOR_SPEED, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[1]);

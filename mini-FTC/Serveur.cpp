@@ -41,5 +41,21 @@ void Serveur::send(const char *buffer)
 
 int Serveur::receive(char *buffer)
 {
+    // Flush all
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 1;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+    {
+        perror("Set Timeout error");
+    }
+    while (recvfrom(sockfd, buffer, 1024, MSG_WAITALL, (struct sockaddr *) &cliaddr, &len) > 0);
+
+    tv.tv_sec = 0;
+    tv.tv_usec = 100000;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+    {
+        perror("Set Timeout error");
+    }
     return recvfrom(sockfd, buffer, 1024, MSG_WAITALL, (struct sockaddr *) &cliaddr, &len);
 }

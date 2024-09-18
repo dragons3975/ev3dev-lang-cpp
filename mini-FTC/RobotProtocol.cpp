@@ -51,7 +51,6 @@ void RobotProtocol::setEv3SensorValue(char *iEv3SensorValue, int size)
 {
     if (size != sizeof(mEv3SensorValue))
     {
-        //throw std::runtime_error("setEv3SensorValue: expected size %d, got %d", sizeof(mEv3SensorValue), size);
         throw std::runtime_error("setEv3SensorValue: wrong size");
     }
     for (int i = 0; i < size; i++)
@@ -64,7 +63,6 @@ void RobotProtocol::setArduinoSensorValue(char *iArduinoSensorValue, int size)
 {
     if (size != sizeof(mArduinoSensorValue))
     {
-        //throw std::runtime_error("setArduinoSensorValue: expected size %d, got %d", sizeof(mArduinoSensorValue), size);
         throw std::runtime_error("setArduinoSensorValue: wrong size");
     }
     for (int i = 0; i < size; i++)
