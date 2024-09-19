@@ -36,14 +36,14 @@ char* RobotProtocol::getArduinoMotorSpeed()
 
 void RobotProtocol::encodeSensors(char *buffer)
 {
-    buffer[0] = 12; // buffer size + ev3Sensor size + arduinoSensor size
-    for (int i = 0; i < 8; i++)
+    buffer[0] = 35; // buffer size + ev3Sensor size + arduinoSensor size
+    for (int i = 0; i < 26; i++)
     {
         buffer[i+1] = mEv3SensorValue[i];
     }
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 8; i++)
     {
-        buffer[i+9] = mArduinoSensorValue[i];
+        buffer[i+27] = mArduinoSensorValue[i];
     }
 }
 

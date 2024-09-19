@@ -32,7 +32,7 @@ Arduino::~Arduino()
 
 void Arduino::run()
 {
-    int wArduinoSensorValue[2] = {};
+    char wArduinoSensorValue[8] = {};
 
     set(MOTOR_PORT, 0);
     set(MOTOR_SPEED, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[0]);
@@ -40,16 +40,21 @@ void Arduino::run()
     
     uint8_t tacho[4] = {};
     get(tacho, MOTOR_TACHO_0, 4);
-    wArduinoSensorValue[0] = (tacho[0] & 0xFF) + ((tacho[1] & 0xFF) << 8) + ((tacho[2] & 0xFF) << 16) + ((tacho[3] & 0xFF) << 24);
-    //std::cout << wArduinoSensorValue[0] << std::endl;
+    wArduinoSensorValue[0] = tacho[3] & 0xFF;
+    wArduinoSensorValue[1] = tacho[2] & 0xFF;
+    wArduinoSensorValue[2] = tacho[1] & 0xFF;
+    wArduinoSensorValue[3] = tacho[0] & 0xFF;
 
     set(MOTOR_PORT, 1);
     set(MOTOR_SPEED, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[1]);
     set(MOTOR_UPDATE, (uint8_t)1);
 
     get(tacho, MOTOR_TACHO_0, 4);
-    wArduinoSensorValue[1] = (tacho[0] & 0xFF) + ((tacho[1] & 0xFF) << 8) + ((tacho[2] & 0xFF) << 16) + ((tacho[3] & 0xFF) << 24);
-    //std::cout << wArduinoSensorValue[1] << std::endl
+    wArduinoSensorValue[4] = tacho[3] & 0xFF;
+    wArduinoSensorValue[5] = tacho[2] & 0xFF;
+    wArduinoSensorValue[6] = tacho[1] & 0xFF;
+    wArduinoSensorValue[7] = tacho[0] & 0xFF;
+
 
     set(SERVO_PORT, 0);
     set(SERVO_POSITION, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[2]);
@@ -63,7 +68,7 @@ void Arduino::run()
     set(SERVO_POSITION, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[4]);
     set(SERVO_UPDATE, (uint8_t)1);
 
-    //mRobotProtocol->setArduinoSensorValue()
+    mRobotProtocol->setArduinoSensorValue((char*)wArduinoSensorValue, sizeof(wArduinoSensorValue));
     
 }
 

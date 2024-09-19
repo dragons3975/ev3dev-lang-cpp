@@ -23,39 +23,80 @@ Robot::~Robot()
 
 void Robot::run()
 {
+    // 4*4 (int) moteur + 1 (bool) touch + 1 (uint8) color + 4 (float) ultrasonic + 4 (int) gyro
+    char wEv3SensorValue[26] = {};
+
     int wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[0] & 0xFF)/255.0*2-1);
     //std::cout << "mMotorA: " << wSpeed << std::endl;
-    if (mMotorA.connected()) mMotorA.set_speed_sp(wSpeed).run_forever();
+    if (mMotorA.connected())
+    {
+        mMotorA.set_speed_sp(wSpeed).run_forever();
+        int pos = mMotorA.position();
+        wEv3SensorValue[0] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[1] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[2] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[3] = pos & 0xFF;
+    }
 
     wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[1] & 0xFF)/255.0*2-1);
     //std::cout << "mMotorB: " << wSpeed << std::endl;
-    if (mMotorB.connected()) mMotorB.set_speed_sp(wSpeed).run_forever();
+    if (mMotorB.connected())
+    {
+        mMotorB.set_speed_sp(wSpeed).run_forever();
+        int pos = mMotorB.position();
+        wEv3SensorValue[4] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[5] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[6] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[7] = pos & 0xFF;
+    }
 
     wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[2] & 0xFF)/255.0*2-1);
     //std::cout << "mMotorC: " << wSpeed << std::endl;
-    if (mMotorC.connected()) mMotorC.set_speed_sp(wSpeed).run_forever();
+    if (mMotorC.connected())
+    {
+        mMotorC.set_speed_sp(wSpeed).run_forever();
+        int pos = mMotorC.position();
+        wEv3SensorValue[8] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[9] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[10] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[11] = pos & 0xFF;
+    }
 
     wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[3] & 0xFF)/255.0*2-1);
     //std::cout << "mMotorD: " << wSpeed << std::endl;
-    if (mMotorD.connected()) mMotorD.set_speed_sp(wSpeed).run_forever();
+    if (mMotorD.connected())
+    {
+        mMotorD.set_speed_sp(wSpeed).run_forever();
+        int pos = mMotorD.position();
+        wEv3SensorValue[12] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[13] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[14] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[15] = pos & 0xFF;
+    }
     
-    char wEv3SensorValue[8] = {};
-    wEv3SensorValue[0] = mMotorA.connected() ? mMotorA.position() & 0xFF : 0;
-    wEv3SensorValue[1] = mMotorB.connected() ? mMotorB.position() & 0xFF : 0;
-    wEv3SensorValue[2] = mMotorC.connected() ? mMotorC.position() & 0xFF : 0;
-    wEv3SensorValue[3] = mMotorD.connected() ? mMotorD.position() & 0xFF : 0;
-    wEv3SensorValue[4] = mTouchSensor.connected() ? mTouchSensor.is_pressed() & 0xFF : 0;
-    wEv3SensorValue[5] = mColorSensor.connected() ? mColorSensor.color() & 0xFF : 0;
-    wEv3SensorValue[6] = mUltrasonicSensor.connected() ? (int)mUltrasonicSensor.distance_centimeters() & 0xFF : 0;
-    wEv3SensorValue[7] = mGyroSensor.connected() ? mGyroSensor.angle() & 0xFF : 0;
+    wEv3SensorValue[16] = mTouchSensor.connected() ? mTouchSensor.is_pressed() & 0xFF : 0;
+    wEv3SensorValue[17] = mColorSensor.connected() ? mColorSensor.color() & 0xFF : 0;
+
+    if (mUltrasonicSensor.connected())
+    {
+        int pos = mUltrasonicSensor.distance_centimeters();
+        wEv3SensorValue[18] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[19] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[20] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[21] = pos & 0xFF;
+    }
+    if (mGyroSensor.connected())
+    {
+        int pos = mGyroSensor.angle();
+        wEv3SensorValue[22] = (pos >> 24) & 0xFF;
+        wEv3SensorValue[23] = (pos >> 16) & 0xFF;
+        wEv3SensorValue[24] = (pos >> 8) & 0xFF;
+        wEv3SensorValue[25] = pos & 0xFF;
+    }
 
     mRobotProtocol->setEv3SensorValue(wEv3SensorValue, sizeof(wEv3SensorValue));
 
     mArduino.run();
-
-    //char wArduinoSensorValue[2] = {};
-
-    //mRobotProtocol->setArduinoSensorValue(wArduinoSensorValue, sizeof(wArduinoSensorValue));
 }
 
 void Robot::stop()
