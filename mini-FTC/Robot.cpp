@@ -1,6 +1,7 @@
 #include "Robot.h"
 
 #include <iostream>
+#include <stdlib.h>
 
 Robot::Robot(RobotProtocol *iRobotProtocol)
     : mRobotProtocol(iRobotProtocol)
@@ -23,8 +24,8 @@ Robot::~Robot()
 
 void Robot::run()
 {
-    // 4*4 (int) moteur + 1 (bool) touch + 1 (uint8) color + 4 (float) ultrasonic + 4 (int) gyro
-    char wEv3SensorValue[26] = {};
+    // 4*4 (int) moteur + 1 (bool) touch + 1 (uint8) color + 4 (float) ultrasonic + 4 (int) gyro + 1 (uint8) current + 1 (uint8) voltage + 1 (uint8) cpu
+    char wEv3SensorValue[29] = {};
 
     int wSpeed = 900 * ((mRobotProtocol->getEv3MotorSpeed()[0] & 0xFF)/255.0*2-1);
     //std::cout << "mMotorA: " << wSpeed << std::endl;
@@ -93,6 +94,11 @@ void Robot::run()
         wEv3SensorValue[24] = (pos >> 8) & 0xFF;
         wEv3SensorValue[25] = pos & 0xFF;
     }
+    
+    wEv3SensorValue[26] = ev3dev::power_supply::battery.connected() ? (int)(ev3dev::power_supply::battery.measured_volts() * 255.0 / 10) & 0xFF : int(10.0 * 255.0 / 10) & 0xFF; // Voltage
+    wEv3SensorValue[27] = ev3dev::power_supply::battery.connected() ? (int)(ev3dev::power_supply::battery.measured_amps() * 255.0 / 2000) & 0xFF : int(2000.0 * 255.0 / 2000) & 0xFF; // Current
+    double loadavg[1] = {0.8};
+    wEv3SensorValue[28] = getloadavg(loadavg, 1) != -1 ? (int)(loadavg[0] * 255 / 10) & 0xFF : 0xFF; // CPU
 
     mRobotProtocol->setEv3SensorValue(wEv3SensorValue, sizeof(wEv3SensorValue));
 

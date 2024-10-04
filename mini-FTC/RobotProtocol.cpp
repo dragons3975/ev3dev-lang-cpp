@@ -9,9 +9,9 @@ RobotProtocol::RobotProtocol()
 
 void RobotProtocol::decodeMotors(const char *buffer)
 {
-    if (buffer[0] != 10)
+    if (buffer[0] != 15)
     {
-        throw std::runtime_error("Expected size 10 (buffer size + ev3Motor size + arduinoMotor size).");
+        throw std::runtime_error("Expected size 15 (buffer size + ev3Motor size + 2*arduinoMotor size).");
     }
 
     for (int i = 0; i < 4; i++)
@@ -21,6 +21,10 @@ void RobotProtocol::decodeMotors(const char *buffer)
     for (int i = 0; i < 5; i++)
     {
         mArduinoMotorSpeed[i] = buffer[i+5] & 0xFF;
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        mArduinoMotorMode[i] = buffer[i+10] & 0xFF;
     }
 }
 
@@ -34,16 +38,21 @@ char* RobotProtocol::getArduinoMotorSpeed()
     return mArduinoMotorSpeed;
 }
 
+char* RobotProtocol::getArduinoMotorMode()
+{
+    return mArduinoMotorMode;
+}
+
 void RobotProtocol::encodeSensors(char *buffer)
 {
-    buffer[0] = 35; // buffer size + ev3Sensor size + arduinoSensor size
-    for (int i = 0; i < 26; i++)
+    buffer[0] = 39; // buffer size + ev3Sensor size + arduinoSensor size
+    for (int i = 0; i < 29; i++)
     {
         buffer[i+1] = mEv3SensorValue[i];
     }
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 9; i++)
     {
-        buffer[i+27] = mArduinoSensorValue[i];
+        buffer[i+30] = mArduinoSensorValue[i];
     }
 }
 

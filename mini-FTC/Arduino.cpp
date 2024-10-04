@@ -10,9 +10,10 @@
 #define MOTOR_TACHO_0 0x5
 // 6, 7, 8
 #define SERVO_PORT 0x9
-#define SERVO_POSITION 0xA
-#define SERVO_UPDATE 0xB
-#define BATTERY 0xC
+#define SERVO_MODE 0xA
+#define SERVO_POSITION 0xB
+#define SERVO_UPDATE 0xC
+#define BATTERY 0xD
 
 Arduino::Arduino(RobotProtocol *iRobotProtocol)
     : mComPort("/dev/ttyUSB0", 115200, 8, 'N', 1)
@@ -32,7 +33,7 @@ Arduino::~Arduino()
 
 void Arduino::run()
 {
-    char wArduinoSensorValue[8] = {};
+    char wArduinoSensorValue[9] = {};
 
     set(MOTOR_PORT, 0);
     set(MOTOR_SPEED, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[0]);
@@ -55,18 +56,24 @@ void Arduino::run()
     wArduinoSensorValue[6] = tacho[1] & 0xFF;
     wArduinoSensorValue[7] = tacho[0] & 0xFF;
 
-
     set(SERVO_PORT, 0);
+    set(SERVO_MODE, (uint8_t)mRobotProtocol->getArduinoMotorMode()[2]);
     set(SERVO_POSITION, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[2]);
     set(SERVO_UPDATE, (uint8_t)1);
 
     set(SERVO_PORT, 1);
+    set(SERVO_MODE, (uint8_t)mRobotProtocol->getArduinoMotorMode()[3]);
     set(SERVO_POSITION, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[3]);
     set(SERVO_UPDATE, (uint8_t)1);
 
     set(SERVO_PORT, 2);
+    set(SERVO_MODE, (uint8_t)mRobotProtocol->getArduinoMotorMode()[4]);
     set(SERVO_POSITION, (uint8_t)mRobotProtocol->getArduinoMotorSpeed()[4]);
     set(SERVO_UPDATE, (uint8_t)1);
+    
+    uint8_t battery[1] = {};
+    get(battery, BATTERY, 1);
+    wArduinoSensorValue[8] = battery[0] & 0xFF;
 
     mRobotProtocol->setArduinoSensorValue((char*)wArduinoSensorValue, sizeof(wArduinoSensorValue));
     
