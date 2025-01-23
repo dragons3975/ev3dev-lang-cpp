@@ -31,7 +31,7 @@ void Robot::run()
     //std::cout << "mMotorA: " << wSpeed << std::endl;
     if (mMotorA.connected())
     {
-        mMotorA.set_speed_sp(wSpeed).run_forever();
+        abs(wSpeed) > 10 ? mMotorA.set_speed_sp(wSpeed).run_forever() : mMotorA.stop();
         int pos = mMotorA.position();
         wEv3SensorValue[0] = (pos >> 24) & 0xFF;
         wEv3SensorValue[1] = (pos >> 16) & 0xFF;
@@ -43,7 +43,7 @@ void Robot::run()
     //std::cout << "mMotorB: " << wSpeed << std::endl;
     if (mMotorB.connected())
     {
-        mMotorB.set_speed_sp(wSpeed).run_forever();
+        abs(wSpeed) > 10 ? mMotorB.set_speed_sp(wSpeed).run_forever() : mMotorB.stop();
         int pos = mMotorB.position();
         wEv3SensorValue[4] = (pos >> 24) & 0xFF;
         wEv3SensorValue[5] = (pos >> 16) & 0xFF;
@@ -55,7 +55,7 @@ void Robot::run()
     //std::cout << "mMotorC: " << wSpeed << std::endl;
     if (mMotorC.connected())
     {
-        mMotorC.set_speed_sp(wSpeed).run_forever();
+        abs(wSpeed) > 10 ? mMotorC.set_speed_sp(wSpeed).run_forever() : mMotorC.stop();
         int pos = mMotorC.position();
         wEv3SensorValue[8] = (pos >> 24) & 0xFF;
         wEv3SensorValue[9] = (pos >> 16) & 0xFF;
@@ -67,7 +67,7 @@ void Robot::run()
     //std::cout << "mMotorD: " << wSpeed << std::endl;
     if (mMotorD.connected())
     {
-        mMotorD.set_speed_sp(wSpeed).run_forever();
+        abs(wSpeed) > 10 ? mMotorD.set_speed_sp(wSpeed).run_forever() : mMotorD.stop();
         int pos = mMotorD.position();
         wEv3SensorValue[12] = (pos >> 24) & 0xFF;
         wEv3SensorValue[13] = (pos >> 16) & 0xFF;
